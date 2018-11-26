@@ -1,0 +1,69 @@
+<!DOCTYPE html><html class=''>
+  <head>
+    <style>
+      .container {
+      width: 700px ;
+      margin-left: auto ;
+      margin-right: auto ;
+      padding-top: 10%;
+      }
+    </style>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+  </head>
+  <body>
+    <div id="app">
+      <section class="container">
+        <chartjs-line :labels="labels" :data="dataset" :bind="true" :option="opt">
+        </chartjs-line>
+      </section>
+      <button v-on:click="start_data_acquisition()">
+         Start Data Acquisition
+      </button>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js'></script>
+    <script src='https://unpkg.com/vue-chartjs@2.6.0/dist/vue-chartjs.full.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js'></script>
+    <script src='https://unpkg.com/hchs-vue-charts@1.2.8'></script>
+    <script >'use strict';
+      Vue.use(VueCharts);
+      window.WebSocket = window.WebSocket || window.MozWebSocket;
+      var app = new Vue({
+        el: '#app',
+        data: function data() {
+          return {
+            timestamp: 0,
+            labels:  [],
+            dataset: [],
+            opt: {
+              animation: { duration: 0 },
+            },
+          };
+        },
+        methods: {
+          start_data_acquisition: function() {
+            console.log('ws://' + document.domain + ':' + location.port);
+            var connection = new WebSocket('ws://' + document.domain +
+              ':' + location.port);
+	    connection.onopen = function () {
+	      console.log("connection opened");
+	    };
+	    self = this
+	    connection.onmessage = function(message) {
+	      try {
+	        var json = JSON.parse(message.data);
+		if (json.type === 'message') {
+                   self.labels.push(json.data.timestamp.toString());
+		   self.dataset.push(json.data.dataset.toString());
+		}
+	      } catch (e) {
+	        console.log(e.toString());
+		return;
+              }
+	    }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
