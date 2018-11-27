@@ -1,0 +1,19 @@
+{
+  "name": "bluebird",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/slcz/misc.git"
+  },
+  "author": "Chris Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/slcz/misc/issues"
+  },
+  "homepage": "https://github.com/slcz/misc#readme"
+}
